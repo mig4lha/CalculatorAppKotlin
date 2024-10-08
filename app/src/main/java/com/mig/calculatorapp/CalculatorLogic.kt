@@ -2,6 +2,7 @@ package com.mig.calculatorapp
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import kotlin.text.toDoubleOrNull
 
 class CalculatorLogic {
 
@@ -9,18 +10,27 @@ class CalculatorLogic {
     val currentInput: State<String> = _currentInput
     private var currentOperation: String? = null
     private var previousNumber: Double? = null
+    private var previousResult: Double? = null
 
     fun onNumberClicked(number: String) {
-        if(_currentInput.value == "0"){
+        if (_currentInput.value == "0" && number != ".") {
             _currentInput.value = ""
+        }
+        if (number == "." && _currentInput.value.contains(".")) {
+            return
         }
         _currentInput.value += number
     }
 
     fun onOperationClicked(operation: String) {
         if (_currentInput.value.isNotEmpty()) {
-            previousNumber = _currentInput.value.toDoubleOrNull()
+            previousNumber = if (previousResult != null) {
+                previousResult
+            } else {
+                _currentInput.value.toDoubleOrNull()
+            }
             currentOperation = operation
+            previousResult = null
             _currentInput.value = ""
         }
     }
@@ -36,6 +46,7 @@ class CalculatorLogic {
                 else -> null
             }
             if (result != null) {
+                previousResult = result
                 return if (result % 1 == 0.0) {
                     result.toInt().toString()
                 } else {
@@ -50,6 +61,7 @@ class CalculatorLogic {
         _currentInput.value = "0"
         currentOperation = null
         previousNumber = null
+        previousResult = null
     }
 
     fun getCurrentInput(): String {

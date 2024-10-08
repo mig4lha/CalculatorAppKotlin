@@ -105,7 +105,7 @@ fun CalculatorScreen(modifier: Modifier = Modifier){
         ) {
             CalcButton( modifier = Modifier.weight(1f).aspectRatio(1f), label = "+/-", onClick = { })
             CalcButton( modifier = Modifier.weight(1f).aspectRatio(1f), label = "0", onClick = { calculatorLogic.onNumberClicked("0") })
-            CalcButton( modifier = Modifier.weight(1f).aspectRatio(1f), label = ".", onClick = { })
+            CalcButton( modifier = Modifier.weight(1f).aspectRatio(1f), label = ".", onClick = { calculatorLogic.onNumberClicked(".") })
             CalcButton( modifier = Modifier.weight(1f).aspectRatio(1f), label = "=", onClick = { coroutineScope.launch{ result = calculatorLogic.onEqualsClicked() }}, isOperation = true)
         }
     }
